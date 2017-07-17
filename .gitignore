@@ -104,4 +104,4 @@ ENV/
 .log
 
 #result file
-.txt
+*.txt
