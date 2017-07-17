@@ -102,3 +102,6 @@ ENV/
 
 #log
 .log
+
+#result file
+.txt
