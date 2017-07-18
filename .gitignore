@@ -105,3 +105,6 @@ ENV/
 
 #result file
 *.txt
+
+#idea
+.idea/*
