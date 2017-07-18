@@ -83,7 +83,6 @@ def get_content_title(page_url):
 
     except Exception as e:
         print(e)
-        continue
 
 driver.get(base_url)
 driver.implicitly_wait(10)
