@@ -1,15 +1,9 @@
-
-# coding: utf-8
-
-# In[14]:
-
 import configparser
 import platform
 import os
 import sys
 
 
-# In[15]:
 
 def detect_os():
     platform_name = platform.system()
@@ -21,38 +15,27 @@ def detect_os():
         print('Do not support this platform')
         sys.exit(1)
 
+def initialize_config():
 
-# In[16]:
-
-config = configparser.ConfigParser()
-config['filename'] = {}
-
-
-# In[17]:
-
-config['filename']['controller'] = 'controller.log'
-config['filename']['browser'] = detect_os()
-config['filename']['output'] = 'title.txt'
+    config = configparser.ConfigParser()
+    config['filename'] = {}
 
 
-# In[18]:
-
-config['webdriver'] = {}
-
-
-# In[19]:
-
-config['webdriver']['path'] = './webdriver/' + detect_os()
-config['webdriver']['base_url'] = 'http://tv.naver.com/t/all/popular'
+    config['filename']['controller'] = 'controller.log'
+    config['filename']['browser'] = detect_os()
+    config['filename']['output'] = 'title.txt'
 
 
-# In[20]:
-
-with open('config.ini', 'w') as configfile:
-    config.write(configfile)
+    config['webdriver'] = {}
 
 
-# In[ ]:
+    config['webdriver']['path'] = './webdriver/' + detect_os()
+    config['webdriver']['base_url'] = 'http://tv.naver.com/t/all/popular'
 
 
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
 
+
+if __name__ == "__main__":
+    initialize_config()

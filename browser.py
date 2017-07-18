@@ -1,10 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import configparser
-import platform
-
+from make_config import initialize_config
 
 #read config file
+initialize_config()
 config = configparser.ConfigParser()
 config.read('config.ini')
 
@@ -76,7 +76,7 @@ def get_content_title(page_url):
         clip_title_info = clip_info_area.find_element_by_class_name('watch_title ')
         clip_title = clip_title_info.find_element_by_css_selector('h3')
         clip_title_text = clip_title.get_attribute('title')
-        print(driver.page_source)
+        print(driver.current_url)
         output_file.write(clip_title_text + '\n')
 
         driver.quit()
