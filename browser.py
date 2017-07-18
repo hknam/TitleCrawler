@@ -39,29 +39,32 @@ def get_contents_list():
 
 
 def get_detail_page(page_url):
-    driver = webdriver.Firefox(executable_path = driver_path)
-    driver.set_page_load_timeout(15)
-    driver.get(page_url)
-    
-    contents = driver.find_element_by_class_name('_infiniteCardArea')
-    playlist = contents.find_elements_by_class_name('playlist')
-    
-    for weekly_list in playlist:
-        clip_container = weekly_list.find_elements_by_class_name('playlist_container')
-        for clip in clip_container:
-            ul = clip.find_elements_by_css_selector('ul')
-            for li in ul:
-                #dt = li.find_elements_by_css_selector('dt')
-                anchors = li.find_elements_by_css_selector('a')
-                
-                for index in range(0, len(anchors)):
-                    if index%2 == 1:
-                        continue
-                    else:
-                        href = anchors[index].get_attribute('href')
-                        get_content_title(href)
-    
-    driver.quit()
+    try:
+        driver = webdriver.Firefox(executable_path = driver_path)
+        driver.set_page_load_timeout(15)
+        driver.get(page_url)
+
+        contents = driver.find_element_by_class_name('_infiniteCardArea')
+        playlist = contents.find_elements_by_class_name('playlist')
+
+        for weekly_list in playlist:
+            clip_container = weekly_list.find_elements_by_class_name('playlist_container')
+            for clip in clip_container:
+                ul = clip.find_elements_by_css_selector('ul')
+                for li in ul:
+                    #dt = li.find_elements_by_css_selector('dt')
+                    anchors = li.find_elements_by_css_selector('a')
+
+                    for index in range(0, len(anchors)):
+                        if index%2 == 1:
+                            continue
+                        else:
+                            href = anchors[index].get_attribute('href')
+                            get_content_title(href)
+        driver.quit()
+    except Exception as e:
+        print(e)
+
     
     
 
