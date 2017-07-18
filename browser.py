@@ -1,40 +1,25 @@
-
-# coding: utf-8
-
-# In[ ]:
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import configparser
 import platform
 
 
-# In[ ]:
-
 #read config file
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-
-# In[ ]:
 
 driver_path = config['webdriver']['path']
 base_url = config['webdriver']['base_url']
 output_filename = config['filename']['output']
 
 
-# In[ ]:
-
 output_file = open(output_filename, 'w')
 
-
-# In[ ]:
 
 driver = webdriver.Firefox(executable_path = driver_path)
 driver.set_page_load_timeout(15)
 
-
-# In[ ]:
 
 def get_contents_list():
     content = driver.find_element_by_id('content')
@@ -52,8 +37,6 @@ def get_contents_list():
             href = anchor.get_attribute('href')
             get_detail_page(href)
 
-
-# In[ ]:
 
 def get_detail_page(page_url):
     driver = webdriver.Firefox(executable_path = driver_path)
@@ -82,35 +65,28 @@ def get_detail_page(page_url):
     
     
 
-
-# In[ ]:
-
 def get_content_title(page_url):
-    global outout_file
-    driver = webdriver.Firefox(executable_path = driver_path)
-    driver.set_page_load_timeout(15)
-    driver.get(page_url)
-    
-    clip_info_area = driver.find_element_by_id('clipInfoArea')
-    clip_title_info = clip_info_area.find_element_by_class_name('watch_title ')
-    clip_title = clip_title_info.find_element_by_css_selector('h3')
-    clip_title_text = clip_title.get_attribute('title')
-    #print(clip_title_text)
-    output_file.write(clip_title_text + '\n')
-    
-    driver.quit()
+    try:
+        global outout_file
+        driver = webdriver.Firefox(executable_path = driver_path)
+        driver.set_page_load_timeout(15)
+        driver.get(page_url)
 
+        clip_info_area = driver.find_element_by_id('clipInfoArea')
+        clip_title_info = clip_info_area.find_element_by_class_name('watch_title ')
+        clip_title = clip_title_info.find_element_by_css_selector('h3')
+        clip_title_text = clip_title.get_attribute('title')
+        print(driver.page_source)
+        output_file.write(clip_title_text + '\n')
 
-# In[ ]:
+        driver.quit()
+
+    except Exception as e:
+        print(e)
+        continue
 
 driver.get(base_url)
 driver.implicitly_wait(10)
 get_contents_list()
 
 output_file.close()
-
-
-# In[ ]:
-
-
-
