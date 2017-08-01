@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import configparser
 from make_config import initialize_config
+import time
 
 #read config file
 initialize_config()
@@ -22,6 +23,9 @@ driver.set_page_load_timeout(15)
 
 
 def get_contents_list():
+    #load next 42 channels
+    get_next_content(3)
+
     content = driver.find_element_by_id('content')
     program_wrap = content.find_element_by_class_name('program_wrap')
     program_list = program_wrap.find_element_by_id('cds_flick')
@@ -37,11 +41,17 @@ def get_contents_list():
             href = anchor.get_attribute('href')
             get_detail_page(href)
 
+def get_next_content(count):
+
+    for cnt in range(0, count):
+        load_contents_script = "document.querySelector('.bt_more').click()"
+        driver.execute_script(load_contents_script)
+        time.sleep(10)
 
 def get_detail_page(page_url):
     try:
         driver = webdriver.Firefox(executable_path = driver_path)
-        driver.set_page_load_timeout(15)
+        driver.set_page_load_timeout(30)
         driver.get(page_url)
 
         contents = driver.find_element_by_class_name('_infiniteCardArea')
@@ -89,6 +99,8 @@ def get_content_title(page_url):
 
 driver.get(base_url)
 driver.implicitly_wait(10)
+
 get_contents_list()
+
 
 output_file.close()
