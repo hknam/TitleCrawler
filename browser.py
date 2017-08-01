@@ -1,10 +1,16 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import configparser
-from make_config import initialize_config
+from make_config import initialize_config, initialize_logger
 import time
 
+
+#logger
+
+logger = initialize_logger()
+
 #read config file
+logger.debug("read config file")
 initialize_config()
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -17,13 +23,15 @@ output_filename = config['filename']['output']
 
 output_file = open(output_filename, 'w')
 
-
+logger.debug("open filefox webdriver")
 driver = webdriver.Firefox(executable_path = driver_path)
 driver.set_page_load_timeout(15)
 
 
+
+
 def get_contents_list():
-    #load next 42 channels
+    logger.debug("get channel list")
     get_next_content(3)
 
     content = driver.find_element_by_id('content')
@@ -42,13 +50,14 @@ def get_contents_list():
             get_detail_page(href)
 
 def get_next_content(count):
-
+    logger.debug("load more channels")
     for cnt in range(0, count):
         load_contents_script = "document.querySelector('.bt_more').click()"
         driver.execute_script(load_contents_script)
         time.sleep(10)
 
 def get_detail_page(page_url):
+    logger.debug("get video clips from channel")
     try:
         driver = webdriver.Firefox(executable_path = driver_path)
         driver.set_page_load_timeout(30)
@@ -79,6 +88,7 @@ def get_detail_page(page_url):
     
 
 def get_content_title(page_url):
+    logger.debug("get title from video clip")
     try:
         global outout_file
         driver = webdriver.Firefox(executable_path = driver_path)
@@ -97,10 +107,11 @@ def get_content_title(page_url):
     except Exception as e:
         print(e)
 
+logger.debug("get NaverTV page")
 driver.get(base_url)
 driver.implicitly_wait(10)
 
 get_contents_list()
 
-
+logger.debug("close output file")
 output_file.close()

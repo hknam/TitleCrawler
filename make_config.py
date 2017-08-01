@@ -1,6 +1,6 @@
 import configparser
 import platform
-import os
+import logging
 import sys
 
 
@@ -36,6 +36,21 @@ def initialize_config():
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
 
+def initialize_logger():
+    logger = logging.getLogger('TitleCrawler_logger')
+    fomatter = logging.Formatter('[%(levelname)s|%(filename)s:%(lineno)s] %(asctime)s > %(message)s')
+
+    file_handler = logging.FileHandler('./TitleCrawler.log')
+    stream_handler = logging.StreamHandler()
+
+    file_handler.setFormatter(fomatter)
+    stream_handler.setFormatter(fomatter)
+
+    logger.addHandler(file_handler)
+    logger.addHandler(stream_handler)
+
+    logger.setLevel(logging.DEBUG)
+    return logger
 
 if __name__ == "__main__":
     initialize_config()
