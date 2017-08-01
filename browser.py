@@ -82,7 +82,7 @@ def get_detail_page(page_url):
                             get_content_title(href)
         driver.quit()
     except Exception as e:
-        print(e)
+        logger.debug(e)
 
     
     
@@ -99,13 +99,13 @@ def get_content_title(page_url):
         clip_title_info = clip_info_area.find_element_by_class_name('watch_title ')
         clip_title = clip_title_info.find_element_by_css_selector('h3')
         clip_title_text = clip_title.get_attribute('title')
-        print(driver.current_url)
+        logger.debug(driver.current_url)
         output_file.write(clip_title_text + '\n')
 
         driver.quit()
 
     except Exception as e:
-        print(e)
+        logger.debug(e)
 
 logger.debug("get NaverTV page")
 driver.get(base_url)
