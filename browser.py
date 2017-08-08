@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import TimeoutException
 import configparser
 from make_config import initialize_config, initialize_logger
 import time
@@ -58,8 +59,8 @@ def get_next_content(count):
 
 def get_detail_page(page_url):
     logger.debug("get video clips from channel")
+    driver = webdriver.Firefox(executable_path=driver_path)
     try:
-        driver = webdriver.Firefox(executable_path = driver_path)
         driver.set_page_load_timeout(30)
         driver.get(page_url)
 
@@ -80,19 +81,19 @@ def get_detail_page(page_url):
                         else:
                             href = anchors[index].get_attribute('href')
                             get_content_title(href)
-        driver.quit()
     except Exception as e:
         logger.debug(e)
+    finally:
+        driver.quit()
 
     
     
 
 def get_content_title(page_url):
     logger.debug("get title from video clip")
+    driver = webdriver.Firefox(executable_path=driver_path)
     try:
         global outout_file
-        driver = webdriver.Firefox(executable_path = driver_path)
-        driver.set_page_load_timeout(15)
         driver.get(page_url)
 
         clip_info_area = driver.find_element_by_id('clipInfoArea')
@@ -106,6 +107,10 @@ def get_content_title(page_url):
 
     except Exception as e:
         logger.debug(e)
+    finally:
+        driver.quit()
+
+
 
 logger.debug("get NaverTV page")
 driver.get(base_url)
