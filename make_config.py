@@ -2,7 +2,7 @@ import configparser
 import platform
 import logging
 import sys
-
+import datetime
 
 
 def detect_os():
@@ -20,8 +20,9 @@ def initialize_config():
     config = configparser.ConfigParser()
     config['filename'] = {}
 
-
-    config['filename']['controller'] = 'controller.log'
+    current_time = datetime.datetime.now()
+    controller_log_name = str(current_time)
+    config['filename']['controller'] = controller_log_name + '.log'
     config['filename']['browser'] = detect_os()
     config['filename']['output'] = 'title.txt'
 

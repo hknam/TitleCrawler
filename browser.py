@@ -53,14 +53,15 @@ def get_contents_list():
 
 
 def get_next_content(count):
-    logger.debug("load more channels")
+
     for cnt in range(0, count):
+        logger.debug("load more channels : " + str(count) )
         load_contents_script = "document.querySelector('.bt_more').click()"
         driver.execute_script(load_contents_script)
         time.sleep(10)
 
 def get_detail_page(page_url):
-    logger.debug("get video clips from channel")
+    logger.debug("get video clips from channel : " + page_url)
     driver = webdriver.Firefox(executable_path=driver_path)
     try:
         driver.set_page_load_timeout(30)
