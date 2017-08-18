@@ -33,7 +33,7 @@ driver.set_page_load_timeout(15)
 
 def get_contents_list():
     logger.debug("get channel list")
-    get_next_content(3)
+    get_next_content(5)
 
     content = driver.find_element_by_id('content')
     program_wrap = content.find_element_by_class_name('program_wrap')

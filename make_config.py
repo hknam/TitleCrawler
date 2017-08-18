@@ -30,7 +30,7 @@ def initialize_config():
 
 
     config['webdriver']['path'] = './webdriver/' + detect_os()
-    config['webdriver']['base_url'] = 'http://tv.naver.com/t/all/popular'
+    config['webdriver']['base_url'] = 'http://tv.naver.com/t/all/like'
 
 
     with open('config.ini', 'w') as configfile:
