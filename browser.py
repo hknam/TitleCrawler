@@ -50,6 +50,8 @@ def get_contents_list():
             href = anchor.get_attribute('href')
             get_detail_page(href)
 
+
+
 def get_next_content(count):
     logger.debug("load more channels")
     for cnt in range(0, count):
@@ -63,6 +65,7 @@ def get_detail_page(page_url):
     try:
         driver.set_page_load_timeout(30)
         driver.get(page_url)
+        global output_file
 
         contents = driver.find_element_by_class_name('_infiniteCardArea')
         playlist = contents.find_elements_by_class_name('playlist')
@@ -80,7 +83,9 @@ def get_detail_page(page_url):
                             continue
                         else:
                             href = anchors[index].get_attribute('href')
-                            get_content_title(href)
+                            output_file.write(href + "\n")
+                            logger.info('save url to output file : ' + href)
+                            #get_content_title(href)
     except Exception as e:
         logger.debug(e)
     finally:
