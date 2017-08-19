@@ -22,7 +22,7 @@ def get_content_title(page_url):
 
         output_file.write(clip_title_text + '\n')
         print(clip_title_text)
-        
+
         driver.quit()
 
     except Exception as e:
