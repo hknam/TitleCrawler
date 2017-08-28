@@ -30,9 +30,11 @@ def get_content_title(page_url):
     finally:
         driver.quit()
 
-if not sys.argv[1]:
+if len(sys.argv[1]) == 0:
     print('NEED TITLE LIST')
     sys.exit(1)
+
+
 
 title_list_file = sys.argv[1]
 output_filename = 'title_list.txt'
@@ -40,6 +42,12 @@ output_filename = 'title_list.txt'
 
 with open(title_list_file, 'r') as f:
     titles = f.read().split('\n')
+
+if len(sys.argv[2]) == 0:
+    print('NEED TITLE LIST')
+    print("total title-list length : ", len(titles))
+    sys.exit(1)
+
 
 output_file = open(output_filename, 'w')
 
