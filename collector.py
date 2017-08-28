@@ -44,10 +44,18 @@ with open(title_list_file, 'r') as f:
 output_file = open(output_filename, 'w')
 
 
+for index in range(len(titles)):
+    try:
+        get_content_title(titles[index])
+    except Exception as e:
+        print(e)
+
+
+'''
 for title in titles:
     try:
         get_content_title(title)
     except Exception as e:
         print(e)
-
+'''
 output_file.close()
