@@ -48,15 +48,23 @@ with open(title_list_file, 'r') as f:
     titles = f.read().split('\n')
 
 if len(sys.argv[2]) == 0:
-    print('NEED TITLE LIST')
+    print('NEED START TITLE INDEX')
     print("total title-list length : ", len(titles))
     sys.exit(1)
 
 
+if len(sys.argv[3]) == 0:
+    print('NEED END TITLE INDEX')
+    print("total title-list length : ", len(titles))
+    sys.exit(1)
+
 output_file = open(output_filename, 'w')
 
+start_index = int(sys.argv[2])
+end_index = int(sys.argv[3])
 
-for index in range(len(titles)):
+
+for index in range(start_index, end_index):
     try:
         get_content_title(titles[index])
     except Exception as e:
