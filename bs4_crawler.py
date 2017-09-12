@@ -9,8 +9,11 @@ with open('title.txt', 'r') as f:
 
     for url in url_list:
         file_name = url.split('/')[-1]
-        url_open = urllib.request.urlopen(url)
-        soup = BeautifulSoup(url_open, 'html.parser')
+        try:
+            url_open = urllib.request.urlopen(url)
+            soup = BeautifulSoup(url_open, 'html.parser')
+        except Exception as e:
+            continue
 
         title_div = soup.find('div', attrs={'id':'clipInfoArea'})
         title = title_div.find('h3', attrs={'class':'_clipTitle'}).text
