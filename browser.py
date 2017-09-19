@@ -4,6 +4,7 @@ from selenium.common.exceptions import TimeoutException
 import configparser
 from make_config import initialize_config, initialize_logger
 import time
+import os
 
 
 #logger
@@ -19,10 +20,7 @@ config.read('config.ini')
 
 driver_path = config['webdriver']['path']
 base_url = config['webdriver']['base_url']
-output_filename = config['filename']['output']
 
-
-output_file = open(output_filename, 'w')
 
 logger.debug("open filefox webdriver")
 driver = webdriver.Firefox(executable_path = driver_path)
@@ -63,10 +61,17 @@ def get_next_content(count):
 def get_detail_page(page_url):
     logger.debug("get video clips from channel : " + page_url)
     driver = webdriver.Firefox(executable_path=driver_path)
+
+    folder_path = os.expanduser('~') + '/title-list/'
+    if not os.exists(folder_path):
+        os.makedirs(folder_path)
+
+    output_filename = page_url.split('/')[-1]
+    output_file = open(folder_path + output_filename, 'w')
+
     try:
         driver.set_page_load_timeout(30)
         driver.get(page_url)
-        global output_file
 
         contents = driver.find_element_by_class_name('_infiniteCardArea')
         playlist = contents.find_elements_by_class_name('playlist')
@@ -90,6 +95,7 @@ def get_detail_page(page_url):
     except Exception as e:
         logger.debug(e)
     finally:
+        output_file.close()
         driver.quit()
 
     

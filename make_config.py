@@ -24,7 +24,6 @@ def initialize_config():
     controller_log_name = str(current_time)
     config['filename']['controller'] = controller_log_name + '.log'
     config['filename']['browser'] = detect_os()
-    config['filename']['output'] = 'title.txt'
 
 
     config['webdriver'] = {}

@@ -43,11 +43,12 @@ output_filename = 'title_list.txt'
 with open(title_list_file, 'r') as f:
     titles = f.read().split('\n')
 
+"""
 if len(sys.argv[2]) == 0:
     print('NEED TITLE LIST')
     print("total title-list length : ", len(titles))
     sys.exit(1)
-
+"""
 
 output_file = open(output_filename, 'w')
 
