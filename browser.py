@@ -7,6 +7,7 @@ import time
 import os
 
 
+
 #logger
 
 logger = initialize_logger()
@@ -62,8 +63,8 @@ def get_detail_page(page_url):
     logger.debug("get video clips from channel : " + page_url)
     driver = webdriver.Firefox(executable_path=driver_path)
 
-    folder_path = os.expanduser('~') + '/title-list/'
-    if not os.exists(folder_path):
+    folder_path = os.path.expanduser('~') + '/title-list/'
+    if not os.path.exists(folder_path):
         os.makedirs(folder_path)
 
     output_filename = page_url.split('/')[-1]
@@ -131,4 +132,3 @@ driver.implicitly_wait(10)
 get_contents_list()
 
 logger.debug("close output file")
-output_file.close()
