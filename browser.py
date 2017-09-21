@@ -23,36 +23,25 @@ driver_path = config['webdriver']['path']
 base_url = config['webdriver']['base_url']
 
 
-
+logger.debug("open filefox webdriver")
+driver = webdriver.Firefox(executable_path = driver_path)
+driver.set_page_load_timeout(15)
 
 
 
 
 def get_contents_list():
-    logger.debug("open filefox webdriver")
-    driver = webdriver.Firefox(executable_path=driver_path)
-    driver.set_page_load_timeout(15)
-
-    logger.debug("get NaverTV page")
-    driver.get(base_url)
-    driver.implicitly_wait(10)
-
-    read_count = 5
-
-    get_next_content(driver, read_count)
+    logger.debug("get channel list")
+    get_next_content(5)
 
     content = driver.find_element_by_id('content')
     program_wrap = content.find_element_by_class_name('program_wrap')
     program_list = program_wrap.find_element_by_id('cds_flick')
     container = program_list.find_element_by_class_name('flick-container')
     container_area = container.find_element_by_class_name('program_all')
-
-    logger.debug("get channel list")
+    
     daily_program_list = container_area.find_elements_by_class_name('col')
-
-
-
-
+    
     for col in daily_program_list:
         #anchors = col.find_elements_by_css_selector('a')
         anchors = col.find_elements_by_class_name('info_a')
@@ -60,13 +49,12 @@ def get_contents_list():
             href = anchor.get_attribute('href')
             get_detail_page(href)
 
-    logger.debug("close NaverTV Home webdriver")
-    driver.quit()
 
-def get_next_content(driver, count):
+
+def get_next_content(count):
 
     for cnt in range(0, count):
-        logger.debug("load more channels : " + str(cnt+1) +" clicks")
+        logger.debug("load more channels : " + str(count) )
         load_contents_script = "document.querySelector('.bt_more').click()"
         driver.execute_script(load_contents_script)
         time.sleep(10)
@@ -79,7 +67,7 @@ def get_detail_page(page_url):
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
 
-    output_filename = page_url.split('/')[-2]
+    output_filename = page_url.split('/')[-1]
     output_file = open(folder_path + output_filename, 'w')
 
     try:
@@ -112,11 +100,8 @@ def get_detail_page(page_url):
     except Exception as e:
         logger.debug(e)
     finally:
-        logger.debug("close webdriver")
-        driver.quit()
-        logger.debug("close output file")
         output_file.close()
-
+        driver.quit()
 
     
     
@@ -144,7 +129,10 @@ def get_content_title(page_url):
 
 
 
-
+logger.debug("get NaverTV page")
+driver.get(base_url)
+driver.implicitly_wait(10)
 
 get_contents_list()
 
+logger.debug("close output file")
