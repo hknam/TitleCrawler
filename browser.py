@@ -70,7 +70,7 @@ def get_detail_page(page_url):
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
 
-    output_filename = page_url.split('/')[-1]
+    output_filename = page_url.split('/')[-2]
     output_file = open(folder_path + output_filename, 'w')
 
     try:
