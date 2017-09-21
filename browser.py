@@ -75,7 +75,7 @@ def get_detail_page(page_url):
         driver.get(page_url)
 
         read_count = 5
-        get_next_content(driver, read_count)
+        get_next_content(read_count)
         logger.info('get more video clip lists')
 
         contents = driver.find_element_by_class_name('_infiniteCardArea')
