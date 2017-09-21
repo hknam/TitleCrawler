@@ -86,6 +86,10 @@ def get_detail_page(page_url):
         driver.set_page_load_timeout(30)
         driver.get(page_url)
 
+        read_count = 5
+        get_next_content(driver, read_count)
+        logger.info('get more video clip lists')
+
         contents = driver.find_element_by_class_name('_infiniteCardArea')
         playlist = contents.find_elements_by_class_name('playlist')
 
