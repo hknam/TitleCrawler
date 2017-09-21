@@ -44,11 +44,14 @@ def get_contents_list():
     
     for col in daily_program_list:
         #anchors = col.find_elements_by_css_selector('a')
-        anchors = col.find_elements_by_class_name('info_a')
-        for anchor in anchors:
-            href = anchor.get_attribute('href')
-            get_detail_page(href)
+        try:
+            anchors = col.find_elements_by_class_name('info_a')
+            for anchor in anchors:
+                href = anchor.get_attribute('href')
+                get_detail_page(href)
 
+        except Exception as e:
+            logger.error(e)
 
 
 def get_next_content(count):
