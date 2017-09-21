@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
 import configparser
-from make_config import initialize_config, initialize_logger
+from make_config import initialize_config, initialize_logger, detect_gui
 import time
 import os
 
@@ -23,16 +23,17 @@ driver_path = config['webdriver']['path']
 base_url = config['webdriver']['base_url']
 
 
-logger.debug("open filefox webdriver")
-driver = webdriver.Firefox(executable_path = driver_path)
-driver.set_page_load_timeout(15)
 
 
+def add_virtual_display():
+    from pyvirtualdisplay import Display
+    display = Display(size=(800,600), visible=0)
+    return display
 
 
-def get_contents_list():
+def get_contents_list(driver):
     logger.debug("get channel list")
-    get_next_content(5)
+    get_next_content(driver, 5)
 
     content = driver.find_element_by_id('content')
     program_wrap = content.find_element_by_class_name('program_wrap')
@@ -54,7 +55,7 @@ def get_contents_list():
             logger.error(e)
 
 
-def get_next_content(count):
+def get_next_content(driver, count):
 
     for cnt in range(0, count):
         logger.debug("load more channels : " + str(count) )
@@ -78,7 +79,7 @@ def get_detail_page(page_url):
         driver.get(page_url)
 
         read_count = 5
-        get_next_content(read_count)
+        get_next_content(driver, read_count)
         logger.info('get more video clip lists')
 
         contents = driver.find_element_by_class_name('_infiniteCardArea')
@@ -131,11 +132,36 @@ def get_content_title(page_url):
         driver.quit()
 
 
+def run_web_browser():
+    logger.debug("open filefox webdriver")
+    driver = webdriver.Firefox(executable_path=driver_path)
+    driver.set_page_load_timeout(15)
 
-logger.debug("get NaverTV page")
-driver.get(base_url)
-driver.implicitly_wait(10)
+    logger.debug("get NaverTV page")
+    driver.get(base_url)
+    driver.implicitly_wait(10)
 
-get_contents_list()
+    get_contents_list(driver)
 
-logger.debug("close output file")
+    logger.debug("close output file")
+
+
+
+def main():
+    if detect_gui():
+        logger.info("Detect GUI Environment")
+        run_web_browser()
+    else:
+        logger.info("Detect CLI Environment")
+        display = add_virtual_display()
+        display.start()
+        run_web_browser()
+        display.stop()
+
+
+if __name__ == '__main__':
+    main()
+
+
+
+

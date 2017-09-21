@@ -3,7 +3,7 @@ import platform
 import logging
 import sys
 import datetime
-
+import subprocess
 
 def detect_os():
     platform_name = platform.system()
@@ -14,6 +14,16 @@ def detect_os():
     else:
         print('Do not support this platform')
         sys.exit(1)
+
+def detect_gui():
+    command = "type Xorg"
+    run_command = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
+    output = run_command.stdout.readline()
+    if str(output).find('Xorg is') >= 0 :
+        return True
+    else:
+        return False
+
 
 def initialize_config():
 
