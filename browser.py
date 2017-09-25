@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
 import configparser
 from make_config import initialize_config, initialize_logger, detect_gui
 import time
@@ -101,6 +102,8 @@ def get_detail_page(page_url):
                             output_file.write(href + "\n")
                             logger.info('save url to output file : ' + href)
                             #get_content_title(href)
+                roll_right(driver)
+            break
     except Exception as e:
         logger.debug(e)
     finally:
@@ -108,7 +111,18 @@ def get_detail_page(page_url):
         driver.quit()
 
     
-    
+def roll_right(driver):
+    while True:
+        try:
+            logger.debug("load right clips")
+            roll_right_script = "document.querySelector('.btn_roll right _click').click()"
+            driver.execute_script(roll_right_script)
+            time.sleep(3)
+        except Exception as e:
+            logger.error(e)
+            break
+
+
 
 def get_content_title(page_url):
     logger.debug("get title from video clip")
