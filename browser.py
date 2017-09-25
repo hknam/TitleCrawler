@@ -108,7 +108,6 @@ def get_detail_page(page_url):
                             logger.info('save url to output file : ' + href)
                             #get_content_title(href)
                 roll_right(driver)
-            break
     except Exception as e:
         logger.debug(e)
     finally:
