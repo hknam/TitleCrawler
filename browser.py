@@ -34,7 +34,8 @@ def add_virtual_display():
 
 def get_contents_list(driver):
     logger.debug("get channel list")
-    get_next_content(driver, 5)
+    #read_count = 20
+    get_next_content(driver)
 
     content = driver.find_element_by_id('content')
     program_wrap = content.find_element_by_class_name('program_wrap')
@@ -56,13 +57,17 @@ def get_contents_list(driver):
             logger.error(e)
 
 
-def get_next_content(driver, count):
+def get_next_content(driver):
 
-    for cnt in range(0, count):
-        logger.debug("load more channels : " + str(count) )
-        load_contents_script = "document.querySelector('.bt_more').click()"
-        driver.execute_script(load_contents_script)
-        time.sleep(10)
+    while True:
+        try:
+            logger.debug("load more channels : click button" )
+            load_contents_script = "document.querySelector('.bt_more').click()"
+            driver.execute_script(load_contents_script)
+            time.sleep(10)
+        except Exception as e:
+            logger.error(e)
+            break
 
 def get_detail_page(page_url):
     logger.debug("get video clips from channel : " + page_url)
@@ -79,8 +84,8 @@ def get_detail_page(page_url):
         driver.set_page_load_timeout(30)
         driver.get(page_url)
 
-        read_count = 5
-        get_next_content(driver, read_count)
+        #read_count = 20
+        get_next_content(driver)
         logger.info('get more video clip lists')
 
         contents = driver.find_element_by_class_name('_infiniteCardArea')
