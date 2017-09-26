@@ -1,70 +1,99 @@
-
-import sys
 from selenium import webdriver
-import configparser
 
+import configparser
+from make_config import initialize_config, initialize_logger, detect_gui, add_virtual_display
+import os
+import sys
+
+#logger
+
+
+logger = initialize_logger()
+
+#read config file
+logger.debug("read config file")
+initialize_config()
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-driver_path = config['webdriver']['path']
-base_url = config['webdriver']['base_url']
 
-def get_content_title(page_url):
+driver_path = config['webdriver']['path']
+
+
+def search(dirname):
+    folder_path = os.path.expanduser('~') + '/titles/'
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+    filenames = os.listdir(dirname)
+    for filename in filenames:
+        full_filename = os.path.join(dirname, filename)
+        logger.debug('read saved file : ' + full_filename)
+        open_clip_list(folder_path+filename, full_filename)
+
+def open_clip_list(folder_path, file):
+
+    output_file = open(folder_path, 'w')
+
+    with open(file, 'r') as f:
+        urls = f.read().split('\n')
+        for url in urls:
+            save_title(output_file, url)
+
+    output_file.close()
+
+def run_web_browser():
+
     driver = webdriver.Firefox(executable_path=driver_path)
+    driver.set_page_load_timeout(15)
+
+    return driver
+
+
+
+def save_title(output_file, page_url):
+    logger.debug("open filefox webdriver")
+    driver = run_web_browser()
+
     try:
-        global outout_file
+        logger.debug("get title from video clip")
         driver.get(page_url)
 
         clip_info_area = driver.find_element_by_id('clipInfoArea')
         clip_title_info = clip_info_area.find_element_by_class_name('watch_title ')
         clip_title = clip_title_info.find_element_by_css_selector('h3')
         clip_title_text = clip_title.get_attribute('title')
-
+        logger.debug(driver.current_url)
         output_file.write(clip_title_text + '\n')
-        print(clip_title_text)
 
         driver.quit()
+        logger.debug('close firefox webdriver')
 
     except Exception as e:
-        print(e)
+        logger.debug(e)
     finally:
         driver.quit()
 
-if len(sys.argv[1]) == 0:
-    print('NEED TITLE LIST')
-    sys.exit(1)
 
 
+def main():
 
-title_list_file = sys.argv[1]
-output_filename = 'title_list.txt'
-
-
-with open(title_list_file, 'r') as f:
-    titles = f.read().split('\n')
-
-"""
-if len(sys.argv[2]) == 0:
-    print('NEED TITLE LIST')
-    print("total title-list length : ", len(titles))
-    sys.exit(1)
-"""
-
-output_file = open(output_filename, 'w')
-
-
-for index in range(len(titles)):
     try:
-        get_content_title(titles[index])
+        dirname = sys.argv[1]
     except Exception as e:
-        print(e)
+        logger.error(e)
+        sys.exit(1)
+
+    if detect_gui():
+        logger.info("Detect GUI Environment")
+        search(dirname)
+    else:
+        logger.info("Detect CLI Environment")
+        display = add_virtual_display()
+        display.start()
+        search(dirname)
+        display.stop()
 
 
-'''
-for title in titles:
-    try:
-        get_content_title(title)
-    except Exception as e:
-        print(e)
-'''
-output_file.close()
+if __name__ == '__main__':
+    main()

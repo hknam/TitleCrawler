@@ -25,6 +25,11 @@ def detect_gui():
         return False
 
 
+def add_virtual_display():
+    from pyvirtualdisplay import Display
+    display = Display(size=(800,600), visible=0)
+    return display
+
 def initialize_config():
 
     config = configparser.ConfigParser()

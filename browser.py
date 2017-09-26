@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 import configparser
-from make_config import initialize_config, initialize_logger, detect_gui
+from make_config import initialize_config, initialize_logger, detect_gui, add_virtual_display
 import os
 
 
@@ -26,12 +26,12 @@ base_url = config['webdriver']['base_url']
 
 
 
-
+'''
 def add_virtual_display():
     from pyvirtualdisplay import Display
     display = Display(size=(800,600), visible=0)
     return display
-
+'''
 
 def get_contents_list(driver):
     logger.debug("get channel list")
@@ -75,7 +75,7 @@ def get_detail_page(page_url):
     logger.debug("get video clips from channel : " + page_url)
     driver = webdriver.Firefox(executable_path=driver_path)
 
-    folder_path = os.path.expanduser('~') + '/title-list/'
+    folder_path = os.path.expanduser('~') + '/urls/'
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
 
