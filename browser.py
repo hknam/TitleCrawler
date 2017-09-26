@@ -6,7 +6,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 import configparser
 from make_config import initialize_config, initialize_logger, detect_gui
-import time
 import os
 
 
@@ -36,8 +35,8 @@ def add_virtual_display():
 
 def get_contents_list(driver):
     logger.debug("get channel list")
-    #read_count = 20
-    get_next_content(driver)
+
+    #get_next_content(driver)
 
     content = driver.find_element_by_id('content')
     program_wrap = content.find_element_by_class_name('program_wrap')
@@ -87,7 +86,6 @@ def get_detail_page(page_url):
         driver.set_page_load_timeout(30)
         driver.get(page_url)
 
-        #read_count = 20
         get_next_content(driver)
         logger.info('get more video clip lists')
 
@@ -110,7 +108,8 @@ def get_detail_page(page_url):
                             output_file.write(href + "\n")
                             logger.info('save url to output file : ' + href)
                             #get_content_title(href)
-                roll_right(driver)
+                #roll_right(driver)
+
     except Exception as e:
         logger.debug(e)
     finally:
@@ -119,17 +118,14 @@ def get_detail_page(page_url):
 
     
 def roll_right(driver):
-    while True:
-        try:
-            logger.debug("load right clips")
-            wait = WebDriverWait(driver, 10)
-            element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.btn_roll right _click')))
-            element.click()
+    try:
+        logger.debug("load right clips")
+        wait = WebDriverWait(driver, 10)
+        element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.btn_roll right _click')))
+        element.click()
 
-        except Exception as e:
-            logger.error(e)
-            break
-
+    except Exception as e:
+        logger.error(e)
 
 
 def get_content_title(page_url):
