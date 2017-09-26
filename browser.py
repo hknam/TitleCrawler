@@ -1,7 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 import configparser
 from make_config import initialize_config, initialize_logger, detect_gui
 import time
@@ -62,9 +64,10 @@ def get_next_content(driver):
     while True:
         try:
             logger.debug("load more channels : click button" )
-            load_contents_script = "document.querySelector('.bt_more').click()"
-            driver.execute_script(load_contents_script)
-            time.sleep(10)
+            wait = WebDriverWait(driver, 10)
+            element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.bt_more')))
+            element.click()
+
         except Exception as e:
             logger.error(e)
             break
@@ -119,9 +122,10 @@ def roll_right(driver):
     while True:
         try:
             logger.debug("load right clips")
-            roll_right_script = "document.querySelector('.btn_roll right _click').click()"
-            driver.execute_script(roll_right_script)
-            time.sleep(3)
+            wait = WebDriverWait(driver, 10)
+            element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.btn_roll right _click')))
+            element.click()
+
         except Exception as e:
             logger.error(e)
             break
