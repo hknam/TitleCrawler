@@ -40,6 +40,7 @@ def search(dirname):
     for index in range(start_page_number, end_page_number):
 
         full_filename = os.path.join(dirname, filenames[index])
+        print(full_filename)
         logger.debug('read saved file : ' + full_filename)
         #open_clip_list(folder_path+filename, full_filename)
         open_clip_list(full_filename)
@@ -51,6 +52,10 @@ def open_clip_list(file):
 
     with open(file, 'r') as f:
         urls = f.read().split('\n')
+        if len(urls) == 0:
+            logger.debug('no urls')
+            return
+        
         for url in urls:
             #save_title(output_file, url)
             save_folder_name = file.split('/')[-1]
