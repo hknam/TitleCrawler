@@ -21,33 +21,58 @@ driver_path = config['webdriver']['path']
 
 
 def search(dirname):
+    '''
     folder_path = os.path.expanduser('~') + '/titles/'
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
-
+    '''
     filenames = os.listdir(dirname)
     for filename in filenames:
         full_filename = os.path.join(dirname, filename)
         logger.debug('read saved file : ' + full_filename)
-        open_clip_list(folder_path+filename, full_filename)
+        #open_clip_list(folder_path+filename, full_filename)
+        open_clip_list(full_filename)
 
-def open_clip_list(folder_path, file):
+def open_clip_list(file):
 
-    output_file = open(folder_path, 'w')
+
+    #output_file = open(folder_path, 'w')
 
     with open(file, 'r') as f:
         urls = f.read().split('\n')
         for url in urls:
-            save_title(output_file, url)
+            #save_title(output_file, url)
+            save_folder_name = file.split('/')[-1]
+            folder_path = os.path.expanduser('~') + '/titles/'
+            save_folder_path = folder_path + '/' + save_folder_name
+            if not os.path.exists(save_folder_path):
+                print(save_folder_path)
+                os.makedirs(save_folder_path)
+            save_html(save_folder_path, url)
 
-    output_file.close()
+    #output_file.close()
 
 def run_web_browser():
 
     driver = webdriver.Firefox(executable_path=driver_path)
-    driver.set_page_load_timeout(15)
+    #driver.set_page_load_timeout(15)
 
     return driver
+
+def save_html(folder_path, page_url):
+    filename = page_url.split('/')[-1]
+    output_file = open(folder_path + filename, 'w')
+    driver = run_web_browser()
+    try:
+        logger.debug("get html from video clip")
+        driver.get(page_url)
+        output_file.write(driver.page_source)
+        logger.debug('save page source')
+    except Exception as e:
+        logger.error(e)
+    finally:
+        driver.quit()
+        output_file.close()
 
 
 
