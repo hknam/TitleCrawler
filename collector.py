@@ -44,7 +44,7 @@ def open_clip_list(file):
             #save_title(output_file, url)
             save_folder_name = file.split('/')[-1]
             folder_path = os.path.expanduser('~') + '/titles/'
-            save_folder_path = folder_path + '/' + save_folder_name
+            save_folder_path = folder_path +  save_folder_name
             if not os.path.exists(save_folder_path):
                 print(save_folder_path)
                 os.makedirs(save_folder_path)
@@ -61,7 +61,7 @@ def run_web_browser():
 
 def save_html(folder_path, page_url):
     filename = page_url.split('/')[-1]
-    output_file = open(folder_path + filename, 'w')
+    output_file = open(folder_path + '/' + filename, 'w')
     driver = run_web_browser()
     try:
         logger.debug("get html from video clip")
