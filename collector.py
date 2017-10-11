@@ -52,10 +52,8 @@ def open_clip_list(file):
 
     with open(file, 'r') as f:
         urls = f.read().split('\n')
-        if len(urls) == 0:
-            logger.debug('no urls')
-            return
-        
+
+
         for url in urls:
             #save_title(output_file, url)
             save_folder_name = file.split('/')[-1]
@@ -76,6 +74,9 @@ def run_web_browser():
 
 def save_html(folder_path, page_url):
     filename = page_url.split('/')[-1]
+    if len(filename) == 0:
+        logger.debug('no url')
+        return
     output_file = open(folder_path + '/' + filename, 'w')
     driver = run_web_browser()
     try:
