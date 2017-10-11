@@ -20,6 +20,14 @@ config.read('config.ini')
 driver_path = config['webdriver']['path']
 
 
+try:
+    start_page_number = int(sys.argv[2])
+    end_page_number = int(sys.argv[3])
+except Exception as e:
+    print(e)
+    sys.exit(1)
+
+
 def search(dirname):
     '''
     folder_path = os.path.expanduser('~') + '/titles/'
@@ -27,8 +35,11 @@ def search(dirname):
         os.makedirs(folder_path)
     '''
     filenames = os.listdir(dirname)
-    for filename in filenames:
-        full_filename = os.path.join(dirname, filename)
+    # for filename in filenames:
+
+    for index in range(start_page_number, end_page_number):
+
+        full_filename = os.path.join(dirname, filenames[index])
         logger.debug('read saved file : ' + full_filename)
         #open_clip_list(folder_path+filename, full_filename)
         open_clip_list(full_filename)
@@ -46,7 +57,6 @@ def open_clip_list(file):
             folder_path = os.path.expanduser('~') + '/titles/'
             save_folder_path = folder_path +  save_folder_name
             if not os.path.exists(save_folder_path):
-                print(save_folder_path)
                 os.makedirs(save_folder_path)
             save_html(save_folder_path, url)
 
