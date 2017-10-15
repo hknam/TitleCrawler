@@ -62,12 +62,12 @@ def open_clip_list(file):
             save_folder_name = file.split('/')[-1]
             folder_path = os.path.expanduser('~') + '/titles/'
             save_folder_path = folder_path +  save_folder_name
+
             if not os.path.exists(save_folder_path):
                 os.makedirs(save_folder_path)
-                save_html_bs4(save_folder_path, url)
-            else:
-                logger.debug('exists clip titles')
-                continue
+
+            save_html_bs4(save_folder_path, url)
+
 
     #output_file.close()
 
