@@ -4,6 +4,9 @@ import configparser
 from make_config import initialize_config, initialize_logger, detect_gui, add_virtual_display
 import os
 import sys
+from bs4 import BeautifulSoup
+import urllib.request
+
 
 #logger
 
@@ -59,12 +62,12 @@ def open_clip_list(file):
             save_folder_name = file.split('/')[-1]
             folder_path = os.path.expanduser('~') + '/titles/'
             save_folder_path = folder_path +  save_folder_name
+
             if not os.path.exists(save_folder_path):
                 os.makedirs(save_folder_path)
-                save_html(save_folder_path, url)
-            else:
-                logger.debug('exists clip titles')
-                continue
+
+            save_html_bs4(save_folder_path, url)
+
 
     #output_file.close()
 
@@ -93,6 +96,25 @@ def save_html(folder_path, page_url):
         driver.quit()
         output_file.close()
 
+
+def save_html_bs4(folder_path, page_url):
+    filename = page_url.split('/')[-1]
+    if len(filename) == 0:
+        logger.debug('no url')
+        return
+    output_file = open(folder_path + '/' + filename, 'w')
+
+    try:
+        logger.debug("get html from video clip")
+        url_open = urllib.request.urlopen(page_url)
+        soup = BeautifulSoup(url_open, 'html.parser', from_encoding='utf-8')
+        page_source = soup.prettify()
+        output_file.write(page_source)
+        logger.debug('save page source')
+    except Exception as e:
+        logger.error(e)
+    finally:
+        output_file.close()
 
 
 def save_title(output_file, page_url):
