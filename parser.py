@@ -37,10 +37,15 @@ def save_clip_title(html_folder_path):
             url_open = urllib.request.urlopen(page_url)
             soup = BeautifulSoup(url_open, 'html.parser', from_encoding='utf-8')
 
-            title_area_div = soup.find('div', attrs={'id':'clipInfoArea'})
-            clip_title = title_area_div.find('h3', attrs={'class':'_clipTitle'}).text.strip()
-            print(clip_title)
-            outfile.write(clip_title + '\n')
+            try:
+                title_area_div = soup.find('div', attrs={'id':'clipInfoArea'})
+                clip_title = title_area_div.find('h3', attrs={'class':'_clipTitle'}).text.strip()
+                print(clip_title)
+            except Exception as e:
+                print(e)
+                continue
+            finally:
+                outfile.write(clip_title + '\n')
 
 
 search(page_folder_path)
