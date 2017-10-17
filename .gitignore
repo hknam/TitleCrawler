@@ -111,3 +111,5 @@ ENV/
 
 #config
 config.ini
+
+.DS_Store
